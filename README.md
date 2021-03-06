@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://i.imgur.com/XBAtE7W.png"><br>
 </p>
+
 # Fractal Trees Generator
 
 
@@ -18,13 +19,13 @@ For now there will be only the default version - but my plan is to add more conf
 Blocks are generated asynchronously, so there shuoldn't be a TPS drop even with bigger trees.
 
 
-### Created and tested on:
+## Created and tested on:
 - Purpur-966 (1.16.5)
 - Skript 2.5.3 
 - skript-reflect 2.2-alpha3
 
 
-### Gallery
+## Gallery
 
 <p align="center">
   - some ugly default trees:<br>
