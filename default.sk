@@ -1,0 +1,81 @@
+#that's the main function - it repeats itself until the given amount of generations is created
+#branchLoc - holds a starting location for our tree, and then also end locations of previous branches (from  which the new branches will be generated)
+#currentGeneration - tells on which generation (level) we are - better do not change it unless you know what you're doing
+#baseLength - starting length of the first branch
+#lengthMultiplier - every new generation will be multiplied by that number so the next branches will be shorter (or longer)
+#maxGenerations - total amount of generations (levels) - use carefully
+#previousYaw - holds a horizontall rotation of previous branch - usefull when you want the connections between branches to be smoother - not used here
+
+function fractalTree_default(branchLoc: locations, currentGeneration: integer=1, baseLength: number=7, lengthMultiplier: number=0.95, maxGenerations: number=4, previousYaw: numbers=0):
+	
+	#{_offset} determines the density of every branch - the smaller it is - the more points our branch will have
+	set {_offset} to 1
+
+	#safety check - do not remove or your server will crash
+	{_currentGeneration} <= {_maxGenerations}
+
+	#loop thru all starting locations
+	loop {_branchLoc::*}:
+
+		#amount of branches - it is just random integer
+		set {_branchesAmount} to random element out of (0, 1, 1, 1, 2, 2, 2, 3, 3, 4)
+		loop {_branchesAmount} times:
+			set {_newLoc} to loop-value-1
+
+			#yaw - horizontall rotation of every branch (in degrees from 0 to 360)
+			#random rotation
+			set {_yaw} to random number between 0 and 360
+
+			#pitch - vertical rotation of every branch (in degrees from +90 to -90 where +90 = nadir, 0 = horizon, -90 = zenit)
+			#random rotation from horizon to zenit - so our tree will grow upwards
+			set {_pitch} to random number between 0 and -90
+
+			#then we create a new vector from those values and set its length to {_offset} (1)
+			set {_vector} to vector from yaw {_yaw} and pitch {_pitch}
+			set standard length of {_vector} to {_offset}
+
+			#loop thru every point in every branch
+			loop (rounded up ({_baseLength} / {_offset})) times:
+				set {_newLoc} to {_newLoc} ~ {_vector}
+				
+				#adn here finally we add a block to a variable
+				#you can add a branch thickness here - using for example block sphere expression around {_newLoc}
+				set {_block} to block at {_newLoc}
+				set {fractal::branch::%{_block}%} to {_block}
+
+			#values for nex function - starting locations and previous yaw - do not change
+			set {_v::%loop-value-1%.%loop-value-2%} to {_yaw}
+			set {_newBranches::%loop-value-1%.%loop-value-2%} to {_newLoc}
+
+
+	#at the end lets create a new length, increase the generation and run our function again with updated arguments
+	set {_newLength} to {_baseLength} * {_lengthMultiplier}
+
+	#do not change
+	add 1 to {_currentGeneration}
+	fractalTree_default({_newBranches::*}, {_currentGeneration}, {_newLength}, {_lengthMultiplier}, {_maxGenerations}, {_v::*})
+
+#function to place all generated blocks
+#blocks are placed without updating the surrounding blocks
+#first argument is a block list, the second one is a material
+function drawTree(b: blocks, mat: object):
+	loop {_b::*}:
+		{_mat}.getBlock().setBlock(loop-value, false)
+
+#example command to run a function with targeted block as a starting location
+command fractal:
+	executable by: players
+	trigger:
+		delete {fractal::*}
+
+		create new section with {_} stored in {_sec}:
+			fractalTree_default({_})
+		run section {_sec} async with (targeted block) and wait
+
+		drawTree({fractal::branch::*}, oak log)
+		send "&3&o[fractal-tree_default] &f&oBlocks placed: %(size of {fractal::branch::*})%"
+
+#if needed you can undo the last generated tree
+command fractal-undo:
+	trigger:
+		drawTree({fractal::branch::*}, air)
