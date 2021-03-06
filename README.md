@@ -15,7 +15,16 @@ There are no leaves on them for now - I will try to make some in the future (or 
 
 For now there will be only the default version - but my plan is to add more configurations in next few days/weeks.
 
-#Gallery
+Blocks are generated asynchronously, so there shuoldn't be a TPS drop even with bigger trees.
+
+
+###Created and tested on:
+- Purpur-966 (1.16.5)
+- Skript 2.5.3 
+- skript-reflect 2.2-alpha3
+
+
+###Gallery
 
 <p align="center">
   - some ugly default trees:<br>
