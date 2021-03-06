@@ -4,9 +4,7 @@
 
 # Fractal Trees Generator
 
-
-The trees are generated using a recursive function.
-
+<br>
 Let's be honest - trees generated only from constant numbers are boring.. so in default version nearly every value used to create a new branch is randomized - random amount of branches, horizontal (yaw) and vertical (pitch) rotation (if needed there can also be a random length, thickness or the density of points in every branch)
 Everything sounds great until you create some trees using that randomized values (they are just ugly lines without any pattern - which is shown in gallery below)
 
