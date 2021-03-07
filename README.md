@@ -27,7 +27,7 @@ Blocks are generated asynchronously, so there shuoldn't be a TPS drop even with 
 ## Gallery
 
 
-[- some ugly default trees:<br>](default.sk)
+- some ugly [default trees](default.sk):<br>
 <p align="center">
   <img src="https://i.imgur.com/4yLdU4b.jpg"><br><br>
 </p>
